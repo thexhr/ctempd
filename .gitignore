@@ -1,0 +1,6 @@
+*.o
+cscope.*
+ctempd
+tags
+*.html
+mandoc.css
