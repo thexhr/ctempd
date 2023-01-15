@@ -10,10 +10,10 @@
 #include <X11/Xatom.h>
 #include <X11/extensions/Xrandr.h>
 
-#include <sys/syslimits.h>
 #include <sys/wait.h>
 
 #include <errno.h>
+#include <limits.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
