@@ -30,6 +30,7 @@ static int verbose = 0;
 void show_usage(void);
 void set_color(int);
 void daemonize(void);
+int sandbox(void);
 
 /* cribbed from redshift, but truncated with 500K steps */
 static const struct { float r; float g; float b; } whitepoints[] = {
@@ -138,8 +139,7 @@ daemonize(void)
 int
 main(int argc, char **argv)
 {
-	char hf[PATH_MAX];
-	char *ep, *env;
+	char *ep;
 	unsigned long ulval;
 	pid_t pid;
 	int temp = TEMP_DEFAULT;
@@ -165,41 +165,7 @@ main(int argc, char **argv)
 	argc -= optind;
 	argv += optind;
 
-#ifdef __OpenBSD__
-	if (unveil("/usr/X11R6/", "r") == -1) {
-		fprintf(stderr, "unveil\n");
-		return 1;
-	}
-	if (unveil("/tmp/.X11-unix/", "rw") == -1) {
-		fprintf(stderr, "unveil\n");
-		return EXIT_FAILURE;
-	}
-	if (unveil("/etc/hosts", "r") == -1) {
-		fprintf(stderr, "unveil\n");
-		return EXIT_FAILURE;
-	}
-	if (unveil("/etc/resolv.conf", "r") == -1) {
-		fprintf(stderr, "unveil\n");
-		return EXIT_FAILURE;
-	}
-	if ((env = getenv("HOME"))) {
-		if (snprintf(hf, sizeof hf, "%s/.Xauthority", env) <= (int)sizeof(hf)) {
-			if (unveil(hf, "r") == -1) {
-				fprintf(stderr, "unveil\n");
-				return 1;
-			}
-		}
-	}
-	if (unveil(NULL, NULL) == -1) {
-		fprintf(stderr, "unveil\n");
-		return 1;
-	}
-
-	if (pledge("stdio proc rpath unix", NULL) == -1) {
-		fprintf(stderr, "pledge\n");
-		return 1;
-	}
-#endif /* __OpenBSD__ */
+	sandbox();
 
 	if (argc >= 1) {
 		errno = 0;
@@ -236,6 +202,37 @@ main(int argc, char **argv)
 	}
 
 	wait(NULL);
+
+	return 0;
+}
+
+int
+sandbox(void)
+{
+#ifdef __OpenBSD__
+	char hf[PATH_MAX], *env;
+
+	if (unveil("/usr/X11R6/", "r") == -1)
+		return 1;
+	if (unveil("/tmp/.X11-unix/", "rw") == -1)
+		return 1;
+	if (unveil("/etc/hosts", "r") == -1)
+		return 1;
+	if (unveil("/etc/resolv.conf", "r") == -1)
+		return 1;
+	if ((env = getenv("HOME"))) {
+		if (snprintf(hf, sizeof hf, "%s/.Xauthority", env) <= (int)sizeof(hf)) {
+			if (unveil(hf, "r") == -1)
+				return 1;
+		}
+	}
+
+	if (unveil(NULL, NULL) == -1)
+		return 1;
+
+	if (pledge("stdio proc rpath unix", NULL) == -1)
+		return 1;
+#endif /* __OpenBSD__ */
 
 	return 0;
 }
