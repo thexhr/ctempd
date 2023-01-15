@@ -29,7 +29,7 @@ static Display *dpy;
 void
 show_usage(void)
 {
-	fprintf(stderr, "ctempd [-fhv] [temp]\n");
+	fprintf(stderr, "ctempd [-fhsv] [temp]\n");
 	exit(1);
 }
 
@@ -113,14 +113,18 @@ main(int argc, char **argv)
 	pid_t pid;
 	int temp = TEMP_DEFAULT;
 	int ch;
+	int settemp = 0;
 
-	while ((ch = getopt(argc, argv, "fhv")) != -1) {
+	while ((ch = getopt(argc, argv, "fhsv")) != -1) {
 		switch (ch) {
 		case 'f':
 			fg = 1;
 			break;
 		case 'h':
 			show_usage();
+			break;
+		case 's':
+			settemp = 1;
 			break;
 		case 'v':
 			verbose = 1;
@@ -163,8 +167,11 @@ main(int argc, char **argv)
 		if (verbose)
 			printf("Set color temperature to %d\n", temp);
 
-		set_color(temp);
-		return 0;
+		if (settemp) {
+			set_color(temp);
+			return 0;
+		}
+
 	}
 
 	pid = fork();
