@@ -139,7 +139,10 @@ main(int argc, char **argv)
 		return 1;
 	}
 
-	sandbox();
+	if (sandbox() == -1) {
+		fprintf(stderr, "Cannot sandbox programm\n");
+		return 1;
+	}
 
 	if (argc >= 1) {
 		errno = 0;
@@ -187,25 +190,25 @@ sandbox(void)
 	char hf[PATH_MAX], *env;
 
 	if (unveil("/usr/X11R6/", "r") == -1)
-		return 1;
+		return -1;
 	if (unveil("/tmp/.X11-unix/", "rw") == -1)
-		return 1;
+		return -1;
 	if (unveil("/etc/hosts", "r") == -1)
-		return 1;
+		return -1;
 	if (unveil("/etc/resolv.conf", "r") == -1)
-		return 1;
+		return -1;
 	if ((env = getenv("HOME"))) {
 		if (snprintf(hf, sizeof hf, "%s/.Xauthority", env) <= (int)sizeof(hf)) {
 			if (unveil(hf, "r") == -1)
-				return 1;
+				return -1;
 		}
 	}
 
 	if (unveil(NULL, NULL) == -1)
-		return 1;
+		return -1;
 
 	if (pledge("stdio proc unix", NULL) == -1)
-		return 1;
+		return -1;
 #endif /* __OpenBSD__ */
 
 	return 0;
