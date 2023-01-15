@@ -26,6 +26,7 @@
 
 static int fg = 0;
 static int verbose = 0;
+static Display *dpy;
 
 void show_usage(void);
 void set_color(int);
@@ -66,7 +67,6 @@ show_usage(void)
 void
 set_color(int temp)
 {
-	Display *dpy = XOpenDisplay(NULL);
 	int screen = DefaultScreen(dpy);
 	Window root = RootWindow(dpy, screen);
 
@@ -165,6 +165,11 @@ main(int argc, char **argv)
 	argc -= optind;
 	argv += optind;
 
+	if ((dpy = XOpenDisplay(NULL)) == NULL) {
+		fprintf(stderr, "Cannot connect to X server\n");
+		return 1;
+	}
+
 	sandbox();
 
 	if (argc >= 1) {
@@ -230,7 +235,7 @@ sandbox(void)
 	if (unveil(NULL, NULL) == -1)
 		return 1;
 
-	if (pledge("stdio proc rpath unix", NULL) == -1)
+	if (pledge("stdio proc unix", NULL) == -1)
 		return 1;
 #endif /* __OpenBSD__ */
 
