@@ -66,12 +66,6 @@ set_color(int temp)
 	}
 }
 
-#define TEMP_MORNING	6200
-#define TEMP_LUNCH		6500
-#define TEMP_EVENING	4500
-#define TEMP_NIGHT		3200
-#define TEMP_MIGNIGHT	3000
-
 void
 daemonize(int default_temp)
 {
@@ -79,23 +73,24 @@ daemonize(int default_temp)
 	time_t t;
 	int hour = 0;
 	int temp = default_temp;
+	int div = default_temp / 24;
 	int old = 0;
+	int diff;
 
 	while (1) {
 		t = time(NULL);
 		tm = *localtime(&t);
 		hour = tm.tm_hour;
 
-		if (hour >= 0 && hour < 7)
-			temp = TEMP_MIGNIGHT;
-		else if (hour >= 7 && hour < 12)
-			temp = TEMP_MORNING;
-		else if (hour >= 12 && hour < 17)
-			temp = TEMP_LUNCH;
-		else if (hour >= 17 && hour < 22)
-			temp = TEMP_EVENING;
-		else if (hour >= 22)
-			temp = TEMP_NIGHT;
+		/* Color temperature before midday ... */
+		if (hour < 12) {
+			diff = 12 - hour;
+			temp = default_temp - (diff * div);
+		/* ... and after midday */
+		} else {
+			diff = hour - 12;
+			temp = default_temp - (diff * div);
+		}
 
 		if (old != temp) {
 			if (verbose)
