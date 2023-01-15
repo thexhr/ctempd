@@ -73,12 +73,13 @@ set_color(int temp)
 #define TEMP_MIGNIGHT	3000
 
 void
-daemonize(void)
+daemonize(int default_temp)
 {
 	struct tm tm;
 	time_t t;
 	int hour = 0;
-	int temp = TEMP_DEFAULT;
+	int temp = default_temp;
+	int old = 0;
 
 	while (1) {
 		t = time(NULL);
@@ -96,10 +97,14 @@ daemonize(void)
 		else if (hour >= 22)
 			temp = TEMP_NIGHT;
 
-		if (verbose)
-			printf("Current time: %d. Set color temperature to %d\n", hour, temp);
+		if (old != temp) {
+			if (verbose)
+				printf("Current time: %d. Set color temperature to %d\n", hour, temp);
 
-		set_color(temp);
+			set_color(temp);
+		}
+
+		old = temp;
 
 		sleep(SLEEP);
 	}
@@ -182,7 +187,7 @@ main(int argc, char **argv)
 		case 0:
 			if (!fg)
 				daemon(0, 0);
-			daemonize();
+			daemonize(temp);
 	}
 
 	wait(NULL);

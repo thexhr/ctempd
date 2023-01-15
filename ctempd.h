@@ -31,7 +31,7 @@ static const struct { float r; float g; float b; } whitepoints[] = {
 
 void show_usage(void);
 void set_color(int);
-void daemonize(void);
+void daemonize(int);
 int sandbox(void);
 
 #endif
