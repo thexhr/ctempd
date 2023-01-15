@@ -29,4 +29,9 @@ static const struct { float r; float g; float b; } whitepoints[] = {
 	{ 0.77442176,  0.85453121,  1.00000000, },
 };
 
+void show_usage(void);
+void set_color(int);
+void daemonize(void);
+int sandbox(void);
+
 #endif

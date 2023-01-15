@@ -26,11 +26,6 @@ static int fg = 0;
 static int verbose = 0;
 static Display *dpy;
 
-void show_usage(void);
-void set_color(int);
-void daemonize(void);
-int sandbox(void);
-
 void
 show_usage(void)
 {
