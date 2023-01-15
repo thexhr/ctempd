@@ -214,7 +214,7 @@ sandbox(void)
 	if (unveil(NULL, NULL) == -1)
 		return -1;
 
-	if (pledge("stdio proc unix", NULL) == -1)
+	if (pledge("stdio rpath proc unix", NULL) == -1)
 		return -1;
 #endif /* __OpenBSD__ */
 
