@@ -1,0 +1,75 @@
+.\"
+.\" Copyright (c) 2023 Matthias Schmidt
+.\"
+.\" Permission to use, copy, modify, and distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\"
+.Dd January 15, 2023
+.Dt CTEMPD 1
+.Sh NAME
+.Nm ctempd
+.Nd Color Temperature Changing Daemon
+.Sh SYNOPSIS
+.Nm ctempd
+.Op Fl fhv
+.Op Fl s Ar temp
+.Op Ar temperature
+.Sh DESCRIPTION
+.Nm
+is a small daemon to set screen temperature.
+.Nm
+can either set the screen's temperature once or run in the background.
+.Pp
+The options are as follows:
+.Bl -tag -width numbernumb
+.It Fl f
+Do not daemonize.
+If this option is specified,
+.Nm
+will run in the foreground and log to stderr.
+.It Fl h
+Show usage.
+.It Fl s Ar temp
+Set the screen temperature once to
+.Ar temp .
+.It Fl v
+Be more verbose.
+.El
+.Pp
+If no arguments are provided
+.Nm
+forks into the background and sets the color temperature automatically
+based on the time of day.
+It uses 6000 Kelvin as default temperature value.
+.Sh EXIT STATUS
+.Nm
+normally exists with 0 or with 1 if an error occurred.
+.Sh EXAMPLES
+The following examples show how to use
+.Nm .
+.Pp
+Just set the screen's color temperature once to 4500K.
+.Bd -literal -offset indent
+$ ctempd -s 4500
+.Ed
+.Pp
+Run
+.Nm
+in the background with a default value of 6000K.
+.Bd -literal -offset indent
+$ ctempd 6000
+.Ed
+.Sh AUTHORS
+.Nm
+was written by
+.An Matthias Schmidt Aq Mt xhr@giessen.ccc.de .
+The code to change color temperature was written by Ted Unangst.
