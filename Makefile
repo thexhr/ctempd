@@ -24,9 +24,12 @@ SHARE ?= $(PREFIX)/share
 all: $(BIN)
 
 install: all
+	$(INSTALL) -d -m 755 -o root $(MAN)/man1
 	$(INSTALL) -m 755 -o root $(BIN) $(BIND)
+	$(INSTALL) -m 644 -o root $(BIN).1 $(MAN)/man1
 
 uninstall:
+	rm -f $(MAN)/man1/$(BIN).1
 	rm -f $(BIND)/$(BIN)
 
 $(BIN): $(OBJS)
