@@ -17,6 +17,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <syslog.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -95,6 +96,8 @@ daemonize(int default_temp)
 		if (old != temp) {
 			if (verbose)
 				printf("Current time: %d. Set color temperature to %d\n", hour, temp);
+			else
+				syslog(LOG_INFO, "Set color temperature to %dK", temp);
 
 			set_color(temp);
 		}
@@ -108,6 +111,7 @@ daemonize(int default_temp)
 int
 main(int argc, char **argv)
 {
+	extern char *__progname;
 	char *ep;
 	unsigned long ulval;
 	pid_t pid;
@@ -148,6 +152,9 @@ main(int argc, char **argv)
 		return 1;
 	}
 
+	if (!verbose)
+		openlog(__progname, LOG_PID, LOG_USER);
+
 	if (argc >= 1) {
 		errno = 0;
 		ulval = strtol(argv[0], &ep, 10);
@@ -182,10 +189,15 @@ main(int argc, char **argv)
 		case 0:
 			if (!fg)
 				daemon(0, 0);
+			if (!verbose)
+				syslog(LOG_INFO, "Startup temperature daemon");
 			daemonize(temp);
 	}
 
 	wait(NULL);
+
+	if (!verbose)
+		closelog();
 
 	return 0;
 }
