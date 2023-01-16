@@ -95,7 +95,7 @@ daemonize(int default_temp)
 
 		if (old != temp) {
 			if (verbose)
-				printf("Current time: %d. Set color temperature to %d\n", hour, temp);
+				fprintf(stderr, "Current time: %d. Set color temperature to %d\n", hour, temp);
 			else
 				syslog(LOG_INFO, "Set color temperature to %dK", temp);
 
@@ -172,7 +172,7 @@ main(int argc, char **argv)
 		}
 
 		if (verbose)
-			printf("Set color temperature to %d\n", temp);
+			fprintf(stderr, "Set color temperature to %d\n", temp);
 
 		if (settemp) {
 			set_color(temp);
