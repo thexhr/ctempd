@@ -188,10 +188,6 @@ main(int argc, char **argv)
 			return 1;
 		case 0:
 			if (!fg) {
-				if (chdir("/") == -1) {
-					fprintf(stderr, "Cannot chdir to /\n");
-					return 1;
-				}
 				daemon(0, 0);
 				syslog(LOG_INFO, "Startup temperature daemon");
 			}
