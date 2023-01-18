@@ -94,7 +94,7 @@ daemonize(int default_temp)
 		}
 
 		if (old != temp) {
-			if (verbose)
+			if (fg)
 				fprintf(stderr, "Current time: %d. Set color temperature to %d\n", hour, temp);
 			else
 				syslog(LOG_INFO, "Set color temperature to %dK", temp);
@@ -193,15 +193,14 @@ main(int argc, char **argv)
 					return 1;
 				}
 				daemon(0, 0);
-			}
-			if (!verbose)
 				syslog(LOG_INFO, "Startup temperature daemon");
+			}
 			daemonize(temp);
 	}
 
 	wait(NULL);
 
-	if (!verbose)
+	if (!fg)
 		closelog();
 
 	return 0;
