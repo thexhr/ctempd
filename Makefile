@@ -8,8 +8,8 @@ CFLAGS += -Wall -Werror-implicit-function-declaration -Wno-format-truncation
 CFLAGS += -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations
 CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wswitch-enum
 CFLAGS += -Wuninitialized -Wformat-security -Wformat-overflow=2 -Wextra
-CFLAGS += -I/usr/X11R6/include
-LDADD   = -L /usr/X11R6/lib -lm -lX11 -lXrandr
+CFLAGS += -I/usr/X11R6/include -I/usr/local/include
+LDADD   = -L /usr/X11R6/lib -L/usr/local/lib -lm -lX11 -lXrandr
 
 BIN   = ctempd
 OBJS  = ctempd.o
