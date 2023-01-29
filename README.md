@@ -26,8 +26,6 @@ Install the dependencies as follows:
 | OpenBSD | All installed by default |
 | Void Linux| `xbps-install gcc make libXrandr-devel libX11-devel` |
 
-If your operating system does not have `pkg-config` installed by default, you have to install it as well.
-
 ### Compilation and Installation
 
 By default, the `Makefile` looks for external includes and libraries in `/usr/local/{include,lib}`, `/usr/X11R6/{include,lib}`.  If your distribution uses special path, you have to modify the Makefile accordingly.
