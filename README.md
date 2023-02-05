@@ -23,6 +23,7 @@ Install the dependencies as follows:
 
 | Operating System | Commands and Notes |
 | --- | --- |
+| FreeBSD | `pkg install xorg` |
 | OpenBSD | All installed by default |
 | Ubuntu | `apt install build-essential libxrandr-dev` |
 | Void Linux| `xbps-install gcc make libXrandr-devel libX11-devel` |
