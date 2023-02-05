@@ -188,7 +188,10 @@ main(int argc, char **argv)
 			return 1;
 		case 0:
 			if (!fg) {
-				daemon(0, 0);
+				if (daemon(0, 0) == -1) {
+					fprintf(stderr, "Error calling daemon\n");
+					return 1;
+				}
 				syslog(LOG_INFO, "Startup temperature daemon");
 			}
 			daemonize(temp);
