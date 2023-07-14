@@ -1,5 +1,5 @@
-/* Code to set color temperature was written by Ted Unangst as is licensed as
- * public domain, do as you wish
+/* The code to set color temperature (set_color() method below) was written
+ * by Ted Unangst as is licensed as public domain, do as you wish
  * https://flak.tedunangst.com/post/sct-set-color-temperature
  *
  * The rest of the code was written by Matthias Schmidt <xhr@giessen.ccc.de>
