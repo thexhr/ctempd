@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <syslog.h>
@@ -25,7 +26,18 @@
 
 static int fg = 0;
 static int verbose = 0;
+static volatile sig_atomic_t info_flag = 0;
 static Display *dpy;
+
+static void
+signal_handler(int signal)
+{
+	switch (signal) {
+		case SIGINFO:
+			info_flag = 1;
+			break;
+	}
+}
 
 void
 show_usage(void)
@@ -100,6 +112,14 @@ daemonize(int default_temp)
 				syslog(LOG_INFO, "Set color temperature to %dK", temp);
 
 			set_color(temp);
+		}
+
+		if (info_flag) {
+			info_flag = 0;
+			if (fg)
+				fprintf(stderr, "Color temperature set to %d\n", temp);
+			else
+				syslog(LOG_INFO, "Color temperature set to %dK", temp);
 		}
 
 		old = temp;
@@ -180,6 +200,11 @@ main(int argc, char **argv)
 		}
 
 	}
+
+	if (signal(SIGINFO, signal_handler) == SIG_ERR) {
+			fprintf(stderr, "Cannot install signal handler\n");
+			return 1;
+		}
 
 	pid = fork();
 	switch (pid) {
