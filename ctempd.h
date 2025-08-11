@@ -2,7 +2,7 @@
 #define _CTEMP_H
 
 #define AVG(c) whitepoints[temp / 500].c * (1 - ratio) + whitepoints[temp / 500 + 1].c * ratio
-#define TEMP_DEFAULT 4500
+#define TEMP_DEFAULT 6000
 #define SLEEP 60
 
 /* cribbed from redshift, but truncated with 500K steps */
