@@ -14,7 +14,6 @@
 
 #include <errno.h>
 #include <limits.h>
-#include <math.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
